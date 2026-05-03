@@ -1,0 +1,50 @@
+# Local test stack:
+#   - StreamVix (this fork) build da ./
+#   - EasyProxy patched (PR #61 + ensemble OCR) da Pieropapamonello/biscotti#pr-uprot-bypass
+#
+# Avvio:
+#   docker compose -f docker-compose.local.yml up --build -d
+#
+# Test:
+#   curl http://localhost:7860/manifest.json     -> StreamVix
+#   curl http://localhost:7861/                  -> EasyProxy (welcome)
+#
+# Stremio addon URL (locale):
+#   http://localhost:7860/manifest.json
+#   In addon config: MFP URL = http://easyproxy:7860 (rete docker interna)
+#                    MFP Password = easy
+#
+# Nota: per uso da Stremio reale (non solo curl) sostituisci easyproxy:7860
+# con http://<host-ip>:7861 nella addon config.
+
+services:
+  easyproxy:
+    image: streamvix-easyproxy:local
+    container_name: streamvix-easyproxy
+    restart: unless-stopped
+    ports:
+      - "7861:7860"
+    environment:
+      - PORT=7860
+      - API_PASSWORD=easy
+    networks:
+      - streamvix-net
+
+  streamvix:
+    image: streamvix-app:local
+    container_name: streamvix-app
+    restart: unless-stopped
+    ports:
+      - "7860:7860"
+    environment:
+      - PORT=7860
+      - MFP_URL=http://easyproxy:7860
+      - MFP_PASSWORD=easy
+    depends_on:
+      - easyproxy
+    networks:
+      - streamvix-net
+
+networks:
+  streamvix-net:
+    driver: bridge

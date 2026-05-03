@@ -605,15 +605,6 @@ export class Cb01Provider {
         let hostLabel: string;
 
         if (isMaxstream) {
-            // uprot.net/msei/<base64> URLs are protected by a visual captcha
-            // (no redirect, no JS bypass, no IP whitelist). Standard MFP
-            // Maxstream extractors cannot resolve them server-side, so we
-            // suppress the stream rather than expose a broken link.
-            // /msf/ and /msfld/ paths are captcha-less and work fine.
-            if (/\/msei\//i.test(originalEmbed)) {
-                log('maxstream skipped (uprot /msei/ requires captcha solver)', { embed: originalEmbed.substring(0, 120) });
-                return null;
-            }
             // Build the Maxstream extractor URL. Match the format of the
             // known-working endpoint:
             //   /extractor/video.m3u8?host=maxstream&d=<uprot>&redirect_stream=true

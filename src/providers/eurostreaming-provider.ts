@@ -193,11 +193,6 @@ export class EurostreamingProvider {
           }
         } else if (h.includes('maxstream') || h.includes('uprot') || /^Maxstream$/i.test(s.player || '')) {
           playerName = 'Maxstream';
-          // Skip captcha-protected variants that MFP cannot bypass
-          if (/\/msei\//i.test(s.url) || /maxstream\.video\/uprots\//i.test(s.url)) {
-            console.log('[Eurostreaming] skip maxstream captcha url', s.url.substring(0, 120));
-            continue;
-          }
           // Maxstream / uprot: instradiamo via MFP extractor m3u8 (host=maxstream lowercase)
           if (this.config.mfpUrl) {
             const base = this.config.mfpUrl.replace(/\/$/, '');

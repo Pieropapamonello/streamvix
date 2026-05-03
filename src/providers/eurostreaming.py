@@ -703,15 +703,6 @@ async def scraping_links(atag, MFP, client):
             if not resolved:
                 continue
             url = str(resolved).strip()
-            # Skip captcha-protected variants: MFP cannot bypass them server-side.
-            #  - uprot.net/msei/<base64>      : visual captcha
-            #  - maxstream.video/uprots/<b64> : encrypted wrapper (Error 131)
-            if re.search(r'/msei/', url, re.I):
-                log('scraping_links: maxstream skipped (uprot /msei/ captcha)', url[:120])
-                continue
-            if re.search(r'maxstream\.video/uprots/', url, re.I):
-                log('scraping_links: maxstream skipped (maxstream /uprots/ captcha wrapper)', url[:120])
-                continue
             results.append((url, anchor_text, 'maxstream'))
         except Exception as e:
             log('scraping_links: maxstream error', e)
