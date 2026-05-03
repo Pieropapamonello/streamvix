@@ -27,6 +27,11 @@ services:
     environment:
       - PORT=7860
       - API_PASSWORD=easy
+      # Optional: delega OCR captcha al CF Worker AI (Llama 4 / Gemma 3).
+      # Boosta il rate da ~50% a ~90%. Vedi README per deploy del Worker.
+      # Se non settati, EasyProxy usa solo ddddocr+tesseract (default).
+      - CF_WORKER_OCR_URL=${CF_WORKER_OCR_URL:-}
+      - CF_WORKER_OCR_AUTH=${CF_WORKER_OCR_AUTH:-}
     networks:
       - streamvix-net
 
